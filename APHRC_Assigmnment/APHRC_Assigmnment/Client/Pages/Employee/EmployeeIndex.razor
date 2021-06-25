@@ -1,0 +1,63 @@
+﻿@page "/employees"
+@using APHRC_Assigmnment.Shared.Models
+@inject HttpClient http
+
+<h3>Employees </h3>
+
+<div class="form-group">
+    <a class="btn btn-success" href="/employees/create">New Employee</a>
+</div>
+
+@if (Employees == null)
+{
+    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" />
+}
+else if (Employees.Count == 0)
+{
+    <text>There are no records to show</text>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Date of Birth</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Employees)
+            {
+            <tr>
+
+                <td>
+                    @employee.FullName
+                </td>
+                <td>
+                    @employee.Contact
+                </td>
+                <td>
+                    @employee.DateOfBirth
+                </td>
+                <td>
+                    <button class="btn btn-success">Edit</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+    List<Employee> Employees { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Employees = await http.GetFromJsonAsync<List<Employee>>("api/Employees");
+    }
+}

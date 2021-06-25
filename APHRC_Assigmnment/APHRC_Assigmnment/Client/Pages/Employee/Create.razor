@@ -1,0 +1,145 @@
+﻿@page "/employees/create"
+@using APHRC_Assigmnment.Shared.Models
+
+@inject HttpClient http
+@inject NavigationManager navigationManager
+<h3>Create Employee</h3>
+
+<EditForm Model="employee" OnValidSubmit="OnValidSubmit">
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <div>
+            <InputText class="form-control" id="name" @bind-Value="@employee.FullName" />
+        </div>
+        <label for="name">Date of Birth</label>
+        <div>
+            <InputDate class="form-control" type="date" @bind-Value="@employee.DateOfBirth"/>
+            @code {
+                private DateTime endDate;
+                public DateTime _endDate
+                {
+                    get { return endDate; }
+                    set
+                    {
+                        endDate = value;
+                //Do Other tasks ......
+                // Eg updateSomething();
+                    }
+                }
+            }
+        </div>
+        <label for="name">Contact</label>
+        <div>
+            <InputText class="form-control" id="name" @bind-Value="@employee.Contact" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-group">
+            @*<button type="button" class="btn btn-secondary"
+                @onclick="@(() => employee.NextOfKin.Add(new EmployeeNextOfKin()))">
+            Add Next of Kin
+        </button>*@
+            <button class="btn btn-primary" @onclick="@ModalShow">Add Next of Kin</button>
+        </div>
+        
+        @*modal start*@
+        @if (showModal)
+        {
+            <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Confirm action</h4>
+                            <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <p>This is the modal content!</p>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
+                            <button type="button" class="btn btn-danger" @onclick=@ModalOk>Delete</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        <hr />
+        @code
+        {
+            bool showModal = false;
+
+            void ModalShow() => showModal = true;
+            void ModalCancel() => showModal = false;
+            void ModalOk()
+            {
+                Console.WriteLine("Modal ok");
+                showModal = false;
+            }
+        }
+@*modal end*@
+        
+        
+
+
+        @for (var i = 0; i < employee.NextOfKin.Count; i++)
+        {
+            var index = i;
+            var nextOfKin = employee.NextOfKin[i];
+
+<h5>Address @(i+1)</h5>
+
+                    <div class="form-group">
+                        <label>Relationship:</label>
+                        <InputText class="form-control" @bind-Value="nextOfKin.FullName" />
+                    </div>
+
+                                        <div class="form-group">
+                                            <label>City:</label>
+                                            <InputText class="form-control" @bind-Value="nextOfKin.Contact" />
+                                        </div>
+
+                                                            <button type="button" class="btn btn-danger"
+                                                                    @onclick="@(() => employee.NextOfKin.RemoveAt(index))">
+                                                                Remove
+                                                            </button>}
+    </div>
+
+    <button class="btn btn-primary" type="submit">Send</button>
+    <button class="btn btn-secondary" type="button" @onclick="Clear">Clear</button>
+
+</EditForm>
+
+@code { Employee employee = new Employee();
+
+            private async Task OnValidSubmit()
+            {
+                var response = await http.PostAsJsonAsync("api/students", employee);
+
+                var body = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // success
+                    Console.WriteLine($"the id of the user is: {body}");
+                    navigationManager.NavigateTo("employees");
+                }
+                else
+                {
+                    // not success
+                    Console.WriteLine(body);
+                }
+            }
+
+            private void Clear()
+            {
+                employee = new Employee();
+            } }
