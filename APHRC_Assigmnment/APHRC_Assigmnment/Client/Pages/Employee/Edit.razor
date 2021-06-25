@@ -108,8 +108,6 @@
         }
         @*modal end*@
 
-
-
         <table class="table">
             <thead>
                 <tr>
@@ -135,15 +133,13 @@
                             @nextOf.RelationShip
                         </td>
                         <td>
-                            <button class="btn btn-danger" @onclick="@(() => employee.NextOfKin.RemoveAt(employee.NextOfKin.IndexOf(nextOf)))">Remove</button>
+                            <button class="btn btn-danger" @onclick="@(() => employee.NextOfKin.Remove(nextOf))">Remove</button>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-
     </div>
-
     @*dependants start*@
     <div class="form-group">
         <div class="form-group">
@@ -199,9 +195,7 @@
                                 <InputText class="form-control" @bind-Value="@dependant.Gender" />
                             </div>
 
-
                         </div>
-
                         <!-- Modal footer -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" @onclick="@(() => DependantModalOk())">
@@ -245,8 +239,6 @@
         }
         @*modal end*@
 
-
-
         <table class="table">
             <thead>
                 <tr>
@@ -272,7 +264,7 @@
                             @nextdDependant.Gender
                         </td>
                         <td>
-                            <button class="btn btn-danger" @onclick="@(() => employee.Dependants.RemoveAt(employee.Dependants.IndexOf(nextdDependant)))">Remove</button>
+                            <button class="btn btn-danger" @onclick="@(() =>employee.Dependants.Remove(nextdDependant))">Remove</button>
                         </td>
                     </tr>
                 }

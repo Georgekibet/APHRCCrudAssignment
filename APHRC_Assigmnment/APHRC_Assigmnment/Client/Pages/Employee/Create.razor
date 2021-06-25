@@ -134,7 +134,7 @@
                             @nextOf.RelationShip
                         </td>
                         <td>
-                            <button class="btn btn-danger" @onclick="@(() => employee.NextOfKin.RemoveAt(employee.NextOfKin.IndexOf(nextOf)))">Remove</button>
+                            <button class="btn btn-danger" @onclick="@(() => employee.NextOfKin.Remove(nextOf))">Remove</button>
                         </td>
                     </tr>
                 }
@@ -271,7 +271,7 @@
                             @nextdDependant.Gender
                         </td>
                         <td>
-                            <button class="btn btn-danger" @onclick="@(() => employee.Dependants.RemoveAt(employee.Dependants.IndexOf(nextdDependant)))">Remove</button>
+                            <button class="btn btn-danger" @onclick="@(() => employee.Dependants.Remove(nextdDependant))">Remove</button>
                         </td>
                     </tr>
                 }
