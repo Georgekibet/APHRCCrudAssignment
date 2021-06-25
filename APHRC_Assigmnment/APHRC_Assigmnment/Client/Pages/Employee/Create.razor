@@ -89,6 +89,7 @@
                 employee.NextOfKin.Add(new EmployeeNextOfKin());
                 _showModal = true;
                 nextOfKin = employee.NextOfKin[employee.NextOfKin.Count - 1];
+                nextOfKin.Id = employee.NextOfKin.Count + 1;
             }
 
             void ModalCancel() => _showModal = false;
@@ -226,6 +227,7 @@
                 showdependantModal = true;
                 dependant = employee.Dependants[employee.Dependants.Count - 1];
                 dependant.DateOfBirth = DateTime.Now.AddYears(-21);
+                dependant.Id = employee.Dependants.Count + 1;
             }
 
             void DependantModalCancel() => showdependantModal = false;

@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using APHRC.Data.Repositories;
 using APHRC_Assigmnment.Shared.Models;
+using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace APHRC_Assigmnment.Server.Controllers
 {
@@ -30,7 +34,23 @@ namespace APHRC_Assigmnment.Server.Controllers
 
             return await _employeeRepository.Save(employee);
         }
+        [Route("employeereport")]
+        public async Task<IActionResult> indiainfected()
+        {
+            var excel = await _employeeRepository.GetAll();
+            var cc = new CsvConfiguration(new System.Globalization.CultureInfo("en-US"));
+            var stream = new MemoryStream();
+            using (var sw = new StreamWriter(stream: stream, encoding: new UTF8Encoding(true)))
+            {
+                using (var cw = new CsvWriter(sw, cc))
+                {
+                    cw.WriteRecords(excel);
+                }
 
+            }
+            string csvName = $"EmployeeReport-{DateTime.UtcNow.Ticks}.csv";
+            return File(stream.ToArray(), "text/csv", csvName);
+        }
 
     }
 }
