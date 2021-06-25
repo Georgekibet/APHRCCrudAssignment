@@ -13,7 +13,7 @@ namespace APHRC_Assigmnment.Shared.Models
 
         public int Id { get; set; }
         public string FullName { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string JobTittle { get; set; }
         public List<EmployeeNextOfKin> NextOfKin { get; set; }
         public List<EmployeeDependant> Dependants { get; set; }
         public string Contact { get; set; }

@@ -18,7 +18,7 @@ namespace APHRC_Assigmnment.Server.Controllers
            var employee1= new Employee()
            {
                FullName = "Name 1",
-               DateOfBirth = DateTime.MinValue,
+               JobTittle = "CEO",
                Contact = "+254710908934",
                NextOfKin = new List<EmployeeNextOfKin>(),
                Dependants = new List<EmployeeDependant>(),
@@ -29,7 +29,7 @@ namespace APHRC_Assigmnment.Server.Controllers
            var employee2= new Employee()
            {
                FullName = "Name 2",
-               DateOfBirth = DateTime.MinValue,
+               JobTittle = "Director general",
                Contact = "+254710908834",
                NextOfKin = new List<EmployeeNextOfKin>(),
                Dependants = new List<EmployeeDependant>(),
