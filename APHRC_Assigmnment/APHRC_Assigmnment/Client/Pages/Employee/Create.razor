@@ -42,30 +42,53 @@
             Add Next of Kin
         </button>*@
             <button class="btn btn-primary" @onclick="@ModalShow">Add Next of Kin</button>
+         
         </div>
         
+  
+        
+
         @*modal start*@
         @if (showModal)
         {
+          
             <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
 
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">Confirm action</h4>
+                            <h4 class="modal-title"> Next of Kin</h4>
                             <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
                         </div>
 
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <p>This is the modal content!</p>
+             
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <InputText class="form-control"  @bind-Value="@nextOfKin.FullName" />
+                            </div>
+             
+                            <div class="form-group">
+                                <label>Relationship:</label>
+                                <InputText class="form-control"  @bind-Value="@nextOfKin.RelationShip" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Contact:</label>
+                                <InputText class="form-control"   @bind-Value="@nextOfKin.Contact"  />
+                            </div>
+
+                         
                         </div>
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
-                            <button type="button" class="btn btn-danger" @onclick=@ModalOk>Delete</button>
+                            @*<button type="button" class="btn btn-secondary" @onclick="@ModalCancel">Cancel</button>*@
+                            @*<button type="button" class="btn btn-block" @onclick=@ModalOk>Save</button>*@
+                            <button type="button" class="btn btn-primary"  @onclick="@(() => ModalOk())">Close
+                                </button>
                         </div>
 
                     </div>
@@ -77,40 +100,68 @@
         {
             bool showModal = false;
 
-            void ModalShow() => showModal = true;
+
+            public EmployeeNextOfKin nextOfKin =null;
+
+
+            void ModalShow()
+            {
+                employee.NextOfKin.Add(new EmployeeNextOfKin());
+                showModal = true;
+                nextOfKin = employee.NextOfKin[employee.NextOfKin.Count - 1];
+            }
+
             void ModalCancel() => showModal = false;
             void ModalOk()
             {
                 Console.WriteLine("Modal ok");
+               // employee.NextOfKin.Add(nextOfKin);
                 showModal = false;
+
             }
         }
 @*modal end*@
         
         
 
+        <table class="table">
+            <thead>
+            <tr>
 
-        @for (var i = 0; i < employee.NextOfKin.Count; i++)
+                <th>Name</th>
+                <th>Contact</th>
+                <th>RelationShip</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var nextOf in employee.NextOfKin)
+            {
+                <tr>
+
+                    <td>
+                        @nextOf.FullName
+                    </td>
+                    <td>
+                        @nextOf.Contact
+                    </td>
+                    <td>
+                        @nextOf.RelationShip
+                    </td>
+                    <td>
+                        <button class="btn btn-success">Remove</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        @*@for (var i = 0; i < employee.NextOfKin.Count; i++)
         {
             var index = i;
             var nextOfKin = employee.NextOfKin[i];
 
-<h5>Address @(i+1)</h5>
 
-                    <div class="form-group">
-                        <label>Relationship:</label>
-                        <InputText class="form-control" @bind-Value="nextOfKin.FullName" />
-                    </div>
-
-                                        <div class="form-group">
-                                            <label>City:</label>
-                                            <InputText class="form-control" @bind-Value="nextOfKin.Contact" />
-                                        </div>
-
-                                                            <button type="button" class="btn btn-danger"
-                                                                    @onclick="@(() => employee.NextOfKin.RemoveAt(index))">
-                                                                Remove
-                                                            </button>}
+        }*@
     </div>
 
     <button class="btn btn-primary" type="submit">Send</button>
@@ -129,7 +180,7 @@
                 if (response.IsSuccessStatusCode)
                 {
                     // success
-                    Console.WriteLine($"the id of the user is: {body}");
+                    Console.WriteLine($"the id of the is: {body}");
                     navigationManager.NavigateTo("employees");
                 }
                 else
