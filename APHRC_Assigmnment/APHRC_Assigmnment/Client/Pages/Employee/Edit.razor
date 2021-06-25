@@ -1,5 +1,6 @@
-﻿@page "/employees/edit"
+﻿@page "/Employee/edit/{employ}"
 @using APHRC_Assigmnment.Shared.Models
+@using Newtonsoft.Json
 
 @inject HttpClient http
 @inject NavigationManager navigationManager
@@ -309,4 +310,18 @@
     private void Clear()
     {
         employee = new Employee();
-    } }
+    }
+    protected override void OnParametersSet()
+    {
+    //the param will be set now
+        var test = employ;
+       // test=test.Remove('\');
+       // test= "{" + test + "}";
+        var convert = JsonConvert.DeserializeObject<Employee>(test);
+        employee = convert;
+
+    }
+
+    [Parameter]
+    public string employ{ get; set; }
+}

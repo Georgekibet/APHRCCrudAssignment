@@ -1,5 +1,6 @@
 ﻿@page "/employees"
 @using APHRC_Assigmnment.Shared.Models
+@using Newtonsoft.Json
 @inject HttpClient http
 @inject NavigationManager navigationManager
 <h3>Employees </h3>
@@ -34,6 +35,7 @@ else
             {
                 <tr>
                     <td>
+
                         @employee.FullName
                     </td>
                     <td>
@@ -67,18 +69,19 @@ else
 
     private async Task removeRow(Employee emp)
     {
-      var response = await http.PostAsJsonAsync("api/employees/delete", emp);
-       
+        var response = await http.PostAsJsonAsync("api/employees/delete", emp);
+
         if (response.IsSuccessStatusCode)
         {
-    // success
+            // success
 
             Employees.Remove(emp);
         }
     }
-    private async Task editRow(Employee emp)
+    private async Task editRow(Employee employ)
     {
-
+        var item = JsonConvert.SerializeObject(employ).ToString();
+        navigationManager.NavigateTo($"/Employee/edit/{item}");
     }
 
-}
+} 
