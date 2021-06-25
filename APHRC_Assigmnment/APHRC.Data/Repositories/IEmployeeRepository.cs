@@ -9,6 +9,7 @@ namespace APHRC.Data.Repositories
   public  interface IEmployeeRepository
   {
       public Task<int> Save(Employee employee);
+      public Task Delete(int id);
 
       public Task<IEnumerable<Employee>> GetAll(int skip=0,int take=1000);
   }

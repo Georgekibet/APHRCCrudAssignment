@@ -34,6 +34,15 @@ namespace APHRC_Assigmnment.Server.Controllers
 
             return await _employeeRepository.Save(employee);
         }
+
+        [HttpPost()]
+        [Route("delete")]
+        public async Task<ActionResult<int>> Delete([FromBody]Employee employee)
+        {
+
+             await _employeeRepository.Delete(employee.Id);
+             return employee.Id;
+        }
         [Route("employeereport")]
         public async Task<IActionResult> indiainfected()
         {

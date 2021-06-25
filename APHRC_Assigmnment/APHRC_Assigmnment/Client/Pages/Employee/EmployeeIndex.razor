@@ -1,7 +1,7 @@
 ﻿@page "/employees"
 @using APHRC_Assigmnment.Shared.Models
 @inject HttpClient http
-
+@inject NavigationManager navigationManager
 <h3>Employees </h3>
 
 <div class="form-group">
@@ -32,24 +32,24 @@ else
         <tbody>
             @foreach (var employee in Employees)
             {
-            <tr>
-
-                <td>
-                    @employee.FullName
-                </td>
-                <td>
-                    @employee.Contact
-                </td>
-                <td>
-                    @employee.JobTittle
-                </td>
-                <td>
-                    <button class="btn btn-success">Edit</button>
-                </td>
-                <td>
-                    <button class="btn btn-success">Delete</button>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @employee.FullName
+                    </td>
+                    <td>
+                        @employee.Contact
+                    </td>
+                    <td>
+                        @employee.JobTittle
+                    </td>
+                    <td>
+                        <button class="btn btn-success" @onclick="@(() => editRow(employee))">Edit</button>
+                        @{ var linenumber = Employees.IndexOf(employee);}
+                        <button class="btn btn-success" @onclick="@(() => removeRow(employee))">Delete</button>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -64,4 +64,21 @@ else
     {
         Employees = await http.GetFromJsonAsync<List<Employee>>("api/Employees");
     }
+
+    private async Task removeRow(Employee emp)
+    {
+      var response = await http.PostAsJsonAsync("api/employees/delete", emp);
+       
+        if (response.IsSuccessStatusCode)
+        {
+    // success
+
+            Employees.Remove(emp);
+        }
+    }
+    private async Task editRow(Employee emp)
+    {
+
+    }
+
 }

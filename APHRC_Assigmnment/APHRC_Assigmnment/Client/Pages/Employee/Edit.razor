@@ -1,0 +1,312 @@
+﻿@page "/employees/edit"
+@using APHRC_Assigmnment.Shared.Models
+
+@inject HttpClient http
+@inject NavigationManager navigationManager
+<h3>Edit Employee</h3>
+
+<EditForm Model="employee" OnValidSubmit="OnValidSubmit">
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <div>
+            <InputText type="text" class="form-control" id="name" @bind-Value="@employee.FullName" />
+        </div> <label for="name">Job Tittle</label>
+        <div>
+            <InputText type="text" class="form-control" id="tittle" @bind-Value="@employee.JobTittle" />
+        </div>
+
+        <label for="name">Contact</label>
+        <div>
+            <InputText type="number" class="form-control" id="contact" @bind-Value="@employee.Contact" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-group">
+
+            <button type="button" class="btn btn-primary" @onclick="@ModalShow">Add Next of Kin</button>
+
+        </div>
+
+        @*modal start*@
+        @if (_showModal)
+        {
+
+            <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"> Next of Kin</h4>
+                            <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <InputText class="form-control" @bind-Value="@nextOfKin.FullName" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Relationship:</label>
+                                <InputText class="form-control" @bind-Value="@nextOfKin.RelationShip" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Contact:</label>
+                                <InputText class="form-control" type="number" @bind-Value="@nextOfKin.Contact" />
+                            </div>
+
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" @onclick="@(() => ModalOk())">
+                                Close
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        <hr />
+        @code
+        {
+            bool _showModal = false;
+
+
+            public EmployeeNextOfKin nextOfKin = null;
+
+
+            void ModalShow()
+            {
+                employee.NextOfKin.Add(new EmployeeNextOfKin());
+                _showModal = true;
+                nextOfKin = employee.NextOfKin[employee.NextOfKin.Count - 1];
+                nextOfKin.Id = employee.NextOfKin.Count + 1;
+            }
+
+            void ModalCancel() => _showModal = false;
+            void ModalOk()
+            {
+                Console.WriteLine("Modal ok");
+                if (string.IsNullOrEmpty(nextOfKin.FullName))
+                {
+                    employee.NextOfKin.Remove(nextOfKin);
+                }
+                // employee.NextOfKin.Add(nextOfKin);
+                _showModal = false;
+
+            }
+        }
+        @*modal end*@
+
+
+
+        <table class="table">
+            <thead>
+                <tr>
+
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>RelationShip</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var nextOf in employee.NextOfKin)
+                {
+                    <tr>
+
+                        <td>
+                            @nextOf.FullName
+                        </td>
+                        <td>
+                            @nextOf.Contact
+                        </td>
+                        <td>
+                            @nextOf.RelationShip
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="@(() => employee.NextOfKin.RemoveAt(employee.NextOfKin.IndexOf(nextOf)))">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+    @*dependants start*@
+    <div class="form-group">
+        <div class="form-group">
+
+            <button type="button" class="btn btn-primary" @onclick="@ModaldependantShow">Add Dependant</button>
+
+        </div>
+
+        @*modal start*@
+        @if (showdependantModal)
+        {
+
+            <div class="modal fade show" id="dependantModal" style="display:block" aria-modal="true" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"> Dependant </h4>
+                            <button type="button" class="close" @onclick="@DependantModalCancel">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <InputText class="form-control" @bind-Value="@dependant.FullName" />
+                            </div>
+
+
+                            <div class="form-group">
+                                <label> Date Of Birth</label>
+                                <InputDate class="form-control" min="19-11-17" type="date" @bind-Value="@dependant.DateOfBirth" />
+                                @code {
+                                    private DateTime endDate = DateTime.Now.AddYears(-5);
+                                    public DateTime _endDate
+                                    {
+                                        get { return endDate; }
+                                        set
+                                        {
+                                            endDate = value;
+                                            //Do Other tasks ......
+                                            // Eg updateSomething();
+                                        }
+                                    }
+                                }
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Contact:</label>
+                                <InputText class="form-control" @bind-Value="@dependant.Gender" />
+                            </div>
+
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" @onclick="@(() => DependantModalOk())">
+                                Close
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        <hr />
+        @code
+        {
+            bool showdependantModal = false;
+
+
+            public EmployeeDependant dependant = null;
+
+
+            void ModaldependantShow()
+            {
+                employee.Dependants.Add(new EmployeeDependant());
+                showdependantModal = true;
+                dependant = employee.Dependants[employee.Dependants.Count - 1];
+                dependant.DateOfBirth = DateTime.Now.AddYears(-21);
+                dependant.Id = employee.Dependants.Count + 1;
+            }
+
+            void DependantModalCancel() => showdependantModal = false;
+            void DependantModalOk()
+            {
+                Console.WriteLine("Modal ok");
+                if (string.IsNullOrEmpty(dependant.FullName))
+                {
+                    employee.Dependants.Remove(dependant);
+                }
+                showdependantModal = false;
+
+            }
+        }
+        @*modal end*@
+
+
+
+        <table class="table">
+            <thead>
+                <tr>
+
+                    <th>Name</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var nextdDependant in employee.Dependants)
+                {
+                    <tr>
+
+                        <td>
+                            @nextdDependant.FullName
+                        </td>
+                        <td>
+                            @nextdDependant.DateOfBirth
+                        </td>
+                        <td>
+                            @nextdDependant.Gender
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="@(() => employee.Dependants.RemoveAt(employee.Dependants.IndexOf(nextdDependant)))">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    @*dependants end*@
+    <button class="btn btn-primary" type="submit">Save</button>
+    <button class="btn btn-secondary" type="button" @onclick="Clear">Clear</button>
+
+</EditForm>
+
+@code { Employee employee = new Employee();
+
+    private async Task OnValidSubmit()
+    {
+        var response = await http.PostAsJsonAsync("api/employees", employee);
+
+        var body = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            // success
+            Console.WriteLine($"the id of the is: {body}");
+            navigationManager.NavigateTo("employees");
+        }
+        else
+        {
+            // not success
+            Console.WriteLine(body);
+        }
+    }
+
+    private void Clear()
+    {
+        employee = new Employee();
+    } }
