@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.16" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\APHRC.Data\APHRC.Data.csproj" />
     <ProjectReference Include="..\Client\APHRC_Assigmnment.Client.csproj" />
     <ProjectReference Include="..\Shared\APHRC_Assigmnment.Shared.csproj" />
   </ItemGroup>

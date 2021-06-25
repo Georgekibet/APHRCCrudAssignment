@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using APHRC.Data.Data;
+using APHRC.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace APHRC_Assigmnment.Server
 {
@@ -24,6 +27,14 @@ namespace APHRC_Assigmnment.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            //db
+            services.AddDbContext<APHRCDataContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("TechShambaniContext")));
+
+            services.AddControllers();
+            services.AddMvc().AddNewtonsoftJson();
+            services.AddSingleton<IEmployeeRepository,InMemoryEmployeeRepository >();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +61,8 @@ namespace APHRC_Assigmnment.Server
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");
             });
+
+
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using APHRC.Data.Repositories;
 using APHRC_Assigmnment.Shared.Models;
 
 namespace APHRC_Assigmnment.Server.Controllers
@@ -10,42 +11,24 @@ namespace APHRC_Assigmnment.Server.Controllers
     [Route("api/employees")]
     public class EmployeesController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<Employee> Get()
-        {
-           var employees= new List<Employee>();
+        private IEmployeeRepository _employeeRepository;
 
-           var employee1= new Employee()
-           {
-               FullName = "Name 1",
-               JobTittle = "CEO",
-               Contact = "+254710908934",
-               NextOfKin = new List<EmployeeNextOfKin>(),
-               Dependants = new List<EmployeeDependant>(),
-               Id = 3
-               
-           };
-           employees.Add(employee1);
-           var employee2= new Employee()
-           {
-               FullName = "Name 2",
-               JobTittle = "Director general",
-               Contact = "+254710908834",
-               NextOfKin = new List<EmployeeNextOfKin>(),
-               Dependants = new List<EmployeeDependant>(),
-               Id = 2
-               
-           };
-           employees.Add(employee2);
-            return employees;
+        public EmployeesController(IEmployeeRepository employeeRepository)
+        {
+            _employeeRepository = employeeRepository;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Employee>> Get()
+        {
+            return await _employeeRepository.GetAll();
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Employee student)
+        public async Task<ActionResult<int>> Post([FromBody]Employee employee)
         {
-           // context.Students.Add(student);
-           // await context.SaveChangesAsync();
-            return student.Id;
+
+            return await _employeeRepository.Save(employee);
         }
 
 
