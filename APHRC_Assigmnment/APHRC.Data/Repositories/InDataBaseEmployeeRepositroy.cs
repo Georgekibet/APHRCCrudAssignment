@@ -7,7 +7,7 @@ using APHRC_Assigmnment.Shared.Models;
 namespace APHRC.Data.Repositories
 {
    public class InDataBaseEmployeeRepositroy :IEmployeeRepository
-    {
+    { 
         public async Task<int> Save(Employee employee)
         {
             throw new NotImplementedException();

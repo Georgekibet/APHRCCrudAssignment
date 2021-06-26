@@ -30,7 +30,7 @@ namespace APHRC_Assigmnment.Server
 
             //db
             services.AddDbContext<APHRCDataContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("TechShambaniContext")));
+                options.UseNpgsql(Configuration.GetConnectionString("dbcontext")));
 
             services.AddControllers();
             services.AddMvc().AddNewtonsoftJson();
